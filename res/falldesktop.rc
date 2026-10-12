@@ -1,0 +1,42 @@
+#include <winres.h>
+#include "resource.h"
+
+IDI_APP         ICON    "falldesktop.ico"
+IDI_APP_PAUSED  ICON    "falldesktop_paused.ico"
+
+IDR_PIXEL1    RCDATA  "pixel/leaf1.png"
+IDR_PIXEL2    RCDATA  "pixel/leaf2.png"
+IDR_PIXEL3    RCDATA  "pixel/leaf3.png"
+IDR_PIXEL4    RCDATA  "pixel/leaf4.png"
+IDR_PIXEL5    RCDATA  "pixel/leaf5.png"
+IDR_PIXEL6    RCDATA  "pixel/leaf6.png"
+IDR_PIXEL7    RCDATA  "pixel/leaf7.png"
+IDR_PIXEL8    RCDATA  "pixel/leaf8.png"
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION     FALLDESKTOP_VERSION_MAJOR, FALLDESKTOP_VERSION_MINOR, FALLDESKTOP_VERSION_PATCH, 0
+ PRODUCTVERSION  FALLDESKTOP_VERSION_MAJOR, FALLDESKTOP_VERSION_MINOR, FALLDESKTOP_VERSION_PATCH, 0
+ FILEFLAGSMASK   0x3fL
+ FILEFLAGS       0x0L
+ FILEOS          VOS_NT_WINDOWS32
+ FILETYPE        VFT_APP
+ FILESUBTYPE     VFT2_UNKNOWN
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName",      "Joshua Starr"
+            VALUE "FileDescription",  "Fall Desktop"
+            VALUE "FileVersion",      FALLDESKTOP_VERSION_STR
+            VALUE "InternalName",     "falldesktop"
+            VALUE "OriginalFilename", "falldesktop.exe"
+            VALUE "ProductName",      "Fall Desktop"
+            VALUE "ProductVersion",   FALLDESKTOP_VERSION_STR
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END

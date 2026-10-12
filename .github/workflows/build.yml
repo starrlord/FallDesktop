@@ -1,0 +1,102 @@
+name: Build and release
+
+# Every push and pull request builds the app and the installer.
+# Pushing a tag like v1.2.3 also publishes a GitHub release with:
+#   FallDesktop-1.2.3-setup.exe           (installer)
+#   FallDesktop-1.2.3-portable-x64.zip    (just the exe)
+# Every build also uploads the Microsoft Store package, FallDesktop-1.2.3-x64.msix, as the
+# artifact FallDesktop-1.2.3-store for Partner Center. It is unsigned (the Store signs it),
+# so it is not attached to releases.
+on:
+  push:
+    branches: ['**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd  # v5.0.1
+
+      - name: Determine version
+        id: version
+        shell: pwsh
+        run: |
+          if ('${{ github.ref_type }}' -eq 'tag') {
+            $v = '${{ github.ref_name }}'.TrimStart('v')
+            if ($v -notmatch '^\d+\.\d+\.\d+$') { throw "Release tags must look like v1.2.3 (got '${{ github.ref_name }}')." }
+          } else {
+            # Untagged builds keep the version in CMakeLists.txt.
+            $v = (Select-String -Path CMakeLists.txt -Pattern 'set\(FALLDESKTOP_VERSION "([0-9.]+)"').Matches[0].Groups[1].Value
+          }
+          "version=$v" >> $env:GITHUB_OUTPUT
+          Write-Host "Version $v"
+
+      - name: Configure
+        # Quoted: unquoted, PowerShell splits "-DNAME=1.0.0" at the first dot.
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 "-DFALLDESKTOP_VERSION=${{ steps.version.outputs.version }}"
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      - name: Install Inno Setup
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe")) {
+            choco install innosetup --no-progress -y
+          }
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $v = '${{ steps.version.outputs.version }}'
+          & "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe" "/DAppVersion=$v" "/DSourceExe=$PWD\build\Release\falldesktop.exe" installer\falldesktop.iss
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          Compress-Archive -Path build\Release\falldesktop.exe -DestinationPath "dist\FallDesktop-$v-portable-x64.zip"
+          Get-ChildItem dist | Format-Table Name, Length
+
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # v5.0.0
+        with:
+          name: FallDesktop-${{ steps.version.outputs.version }}
+          path: dist/*
+          if-no-files-found: error
+
+      - name: Build Store package (MSIX)
+        shell: pwsh
+        run: installer\msix\pack.ps1 -Version '${{ steps.version.outputs.version }}' -Exe build\Release\falldesktop.exe
+
+      - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4  # v5.0.0
+        with:
+          name: FallDesktop-${{ steps.version.outputs.version }}-store
+          path: dist-store/*
+          if-no-files-found: error
+
+  release:
+    if: github.ref_type == 'tag'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0  # v5.0.0
+        with:
+          name: FallDesktop-${{ needs.build.outputs.version }}
+          path: dist
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          gh release create "$TAG" dist/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --title "Fall Desktop $VERSION" \
+            --generate-notes

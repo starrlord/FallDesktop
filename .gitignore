@@ -1,0 +1,23 @@
+# Build output
+build/
+build-*/
+dist/
+dist-store/
+out/
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.user
+CMakeUserPresets.json
+
+# Python (tools/make_icon.py)
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# OS
+.DS_Store
+Thumbs.db
