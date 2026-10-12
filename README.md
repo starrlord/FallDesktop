@@ -7,11 +7,15 @@ the screen. At Halloween the pumpkins become candle-lit jack-o'-lanterns, spider
 keep the webs and now and then a bat flits past; switch Halloween off for a plain,
 cozy autumn. Rake the leaves with your mouse and push through the cobwebs.
 
+![Autumn leaves falling across a Windows 11 desktop and piling up on the taskbar, with pumpkins, scarecrows and cobwebs](docs/desktop.png)
+
 Fall Desktop is a small native Windows 10/11 app written in C++ with Direct2D and
 DirectComposition. It is a single small `.exe` that lives in the notification area,
 and clicks pass straight through the leaves to whatever is underneath.
 
 ## Falling leaves
+
+![Maple, oak, ginkgo and sweetgum leaves tumbling down a dusk sky past the moon](docs/leaves.png)
 
 - **Twenty designs**, each switched on or off individually:
   - tree leaves: sugar maple, oak, birch, ginkgo, sweetgum, willow and Japanese maple,
@@ -39,10 +43,14 @@ Sweep the mouse through a pile to rake it, and the leaves fly up. Turn the
 *Leaf piles* slider all the way up for great heaps more than twice as deep as *Deep*,
 or right down to switch the piles off. *Clear leaf piles* blows them all away.
 
+![The mouse raking through the leaf piles on the taskbar and sending the leaves flying](docs/leaf-piles.png)
+
 ## Pumpkins and scarecrows
 
 Pumpkins stand in patches in the leaf piles on each monitor, always in the same
 spots, with scarecrows in the open stretches between them, facing the pumpkins.
+
+![Candle-lit jack-o'-lanterns and a pumpkin-headed scarecrow in a witch hat standing in the leaves on the taskbar](docs/pumpkins.png)
 
 - **At Halloween**, many of the pumpkins are carved jack-o'-lanterns lit by flickering
   candles, whose glow adds light to the desktop (on HDR and Auto Color Management
@@ -66,6 +74,8 @@ Cobwebs are strung across the corners of the screen: frame and radial threads fr
 anchors on the screen edges, with a spiral of capture silk across them. Every knot
 is a little mass on springs, so the webs breathe in the breeze.
 
+![A cobweb in the top corner of the screen with its spider, beside the moon](docs/cobwebs.png)
+
 - Push the pointer through a web and its threads stretch and spring back, and the
   web trembles for a while. Swipe fast and threads snap; their loose ends curl and
   dangle until they are mended.
@@ -85,11 +95,15 @@ jack-o'-lanterns, the pumpkin-headed scarecrows in witch hats, the spiders on th
 webs and the bats. With it off, Fall Desktop is a plain autumn scene: leaves, leaf
 piles, plain pumpkins, burlap scarecrows and empty cobwebs.
 
+![With Halloween off: plain orange and white pumpkins and burlap-headed scarecrows in a top hat and a straw hat](docs/halloween-off.png)
+
 ## Settings
 
 Click the leaf in the notification area to open the settings. The live preview at
 the top shows your choices immediately, and you can play with the leaves there using
 the mouse.
+
+![The settings window: live preview, leaf picker, sliders, colors and switches](docs/settings.png)
 
 - **Leaves**: the twenty designs above, each on or off.
 - **Amount, speed, size, wind, gusts and leaf pile depth** sliders, and how many
@@ -108,6 +122,10 @@ the mouse.
   - start with Windows.
 
 Right-click the leaf for a quick menu with presets for most of the above.
+
+> Images: rendered by Fall Desktop's own engine and settings window on a staged 4K
+> Windows 11 desktop at 150% scaling (the close-ups at 200% to 300%), cropped from the
+> Microsoft Store screenshots (see [Developer previews](#developer-previews)).
 
 ## Features
 
